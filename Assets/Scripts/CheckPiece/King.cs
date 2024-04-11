@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rook : ChessPiece
+public class King : ChessPiece
 {
     [HideInInspector] public bool hasMadeFirstMove = false;
+    [HideInInspector] public bool isBeingChecked = false;
 
     protected override void Awake()
     {
@@ -32,14 +33,20 @@ public class Rook : ChessPiece
                 if (x == this.currentX && y == this.currentY) continue;
 
                 Vector2Int nextMove = new Vector2Int(x, y);
-                Vector2Int moveDir = nextMove - new Vector2Int(this.currentX, this.currentY);
 
-                if (moveDir.x == moveDir.y || moveDir.x + moveDir.y == 0) continue;
+                if (this.IsOutsideTheBoard(nextMove)) continue;
 
-                this.AddedMoveRecursivelly(ref allPossibleMoveList, ref this.capturableMoveList, nextMove, moveDir);
+                if (this.IsBeingBlockedByTeamAt(nextMove)) continue;
+
+                if (this.IsBeingBlockedByOtherTeamAt(nextMove))
+                {
+                    this.capturableMoveList.Add(nextMove);
+                    continue;
+                }
+
+                allPossibleMoveList.Add(nextMove);
             }
         }
-
         return allPossibleMoveList;
     }
 }

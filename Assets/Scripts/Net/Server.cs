@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Unity.Collections;
 using Unity.Networking.Transport;
 using UnityEngine;
@@ -11,8 +11,8 @@ public class Server : MonoBehaviour
         Singleton = this;
     }
 
-    public NetworkDriver driver;
-    private NativeList<NetworkConnection> connections;
+    public NetworkDriver driver; // đối tượng đưuọc khởi tạo để quản lí một kết nối mạng
+    private NativeList<NetworkConnection> connections; // lưu trữ các dnah sách kêt nối mạng
 
     private bool isActive = false;
     private float keepAliveTickRate = 20f;
@@ -24,6 +24,7 @@ public class Server : MonoBehaviour
     public void Init(ushort port)
     {
         this.driver = NetworkDriver.Create();
+        // khởi tạo chấp nhận bất kì địa chỉ ipv4, cùng mạng. Thiêt lập cổng , lằng nghe với mọi địa chỉ Ip
         NetworkEndPoint endPoint = NetworkEndPoint.AnyIpv4;
         endPoint.Port = port;
 
@@ -42,6 +43,7 @@ public class Server : MonoBehaviour
         this.isActive = true;
     }
 
+    //khi server đóng thì giải phóng tìa nguyên, xóa các dnah sách kết nối
     public void Shutdown()
     {
         if (this.isActive)
@@ -70,6 +72,7 @@ public class Server : MonoBehaviour
         this.UpdateMessagePump();
     }
 
+    // duy trì kết nối, đảm bảo không bị gián đoạn, tần số gửi kepp alive pahri nahats định đe ruyd trì kết nối, dùng tỏng việc két nối liên túcj
     private void KeepAlive()
     {
         if (Time.time - this.lastKeepAlive > this.keepAliveTickRate)

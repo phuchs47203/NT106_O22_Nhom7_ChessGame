@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Unity.Networking.Transport;
 using UnityEngine;
 
@@ -44,39 +44,39 @@ public static class NetUtility
         switch (OpCode)
         {
             case OpCode.KEEP_ALIVE:
-                msg = new NetKeepAlive(streamReader);
+                msg = new NetKeepAlive(streamReader); // trạng thái còn sống, chưa thua
                 break;
 
             case OpCode.WELCOME:
-                msg = new NetWelcome(streamReader);
+                msg = new NetWelcome(streamReader); // màn hình welcome ban đầu
                 break;
 
             case OpCode.START_GAME:
-                msg = new NetStartGame(streamReader);
+                msg = new NetStartGame(streamReader); // bắt đầu game
                 break;
 
             case OpCode.PIECE_SELECTED:
-                msg = new NetPieceSelected(streamReader);
+                msg = new NetPieceSelected(streamReader); // xử lí khi có quân cờ được chọn
                 break;
 
             case OpCode.MAKE_MOVE:
-                msg = new NetMakeMove(streamReader);
+                msg = new NetMakeMove(streamReader); // di chuyển, otnrg net message
                 break;
 
             case OpCode.VICTORY_CLAIM:
-                msg = new NetVictoryClaim(streamReader);
+                msg = new NetVictoryClaim(streamReader); // gọi thông báo chiến thắng
                 break;
 
             case OpCode.READY:
-                msg = new NetReady(streamReader);
+                msg = new NetReady(streamReader); // trnajg thái game sẵn sàng, chwof đợi người chơi
                 break;
 
             case OpCode.SWITCH_TEAM:
-                msg = new NetSwitchTeam(streamReader);
+                msg = new NetSwitchTeam(streamReader); // đổi team
                 break;
 
             case OpCode.REMATCH:
-                msg = new NetRematch(streamReader);
+                msg = new NetRematch(streamReader); // reload lại game
                 break;
 
             default:
