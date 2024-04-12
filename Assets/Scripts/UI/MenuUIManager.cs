@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -42,12 +42,12 @@ public class MenuUIManager : MonoBehaviour
     public void OnOnlineGameBtnClicked()
     {
         Debug.Log("Online Game");
-        menuUIAnim.SetTrigger("UI-2");
+        menuUIAnim.SetTrigger("UI-2"); // khi click vào thì chueyern sang giao diện UI2
     }
     public void OnHostBtnClicked()
     {
         Debug.Log("Host");
-        menuUIAnim.SetTrigger("UI-3");
+        menuUIAnim.SetTrigger("UI-3"); // khi click vào thì chueyern sang giao diện UI3
 
         server.Init(8007);
         client.Init("127.0.0.1", 8007);
@@ -61,16 +61,16 @@ public class MenuUIManager : MonoBehaviour
     public void OnBackUI2BtnClicked()
     {
         Debug.Log("Back UI 2");
-        menuUIAnim.SetTrigger("UI-1");
+        menuUIAnim.SetTrigger("UI-1"); // khi click vào thì chueyern sang giao diện UI1
     }
 
     public void OnBackUI3BtnClicked()
     {
         Debug.Log("Back UI 3");
-        menuUIAnim.SetTrigger("UI-2");
+        menuUIAnim.SetTrigger("UI-2"); // // khi click vào thì chueyern sang giao diện UI2
 
-        server.Shutdown();
-        client.Shutdown();
+        server.Shutdown(); // hủy 
+        client.Shutdown(); // hủy
     }
 
     private void registerEvents(bool confirm)

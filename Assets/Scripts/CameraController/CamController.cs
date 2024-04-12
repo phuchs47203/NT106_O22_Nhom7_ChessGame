@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Những cái này được cấu hình cho 3 camera
 public class CamController : MonoBehaviour
 {
     public static CamController Singleton { get; private set; }
@@ -14,19 +15,19 @@ public class CamController : MonoBehaviour
 
     private void Start()
     {
-        this.registerEvents(true);
+        this.registerEvents(true); // gọi hàm đăng kí sự kiện khi thành pahanf này bắt đâu
     }
 
     private void OnDestroy()
     {
-        this.registerEvents(false);
+        this.registerEvents(false); // gọi hàm hủy sự kiện khi thành pahanf này kt
     }
 
     private void registerEvents(bool confirm)
     {
         if (confirm)
         {
-            ChessBoard.Singleton.onGameStart += onGameStart;
+            ChessBoard.Singleton.onGameStart += onGameStart; // add hàm onGameStart
             NetUtility.C_VICTORY_CLAIM += onVictoryClaimClient;
             NetUtility.C_REMATCH += onNetRematchClient;
         }
@@ -50,7 +51,7 @@ public class CamController : MonoBehaviour
             camera.SetActive(false);
         }
 
-        cameras[(int)team + 1].SetActive(true);
+        cameras[(int)team + 1].SetActive(true); // kích haojt cacmera, để nhìn trong giao diện 2D, team 1 là camera 2, team2 là camera 3
     }
 
     private void onVictoryClaimClient(NetMessage obj)
@@ -60,6 +61,6 @@ public class CamController : MonoBehaviour
             camera.SetActive(false);
         }
 
-        cameras[0].SetActive(true);
+        cameras[0].SetActive(true); // ngừng kích haotj mọi câera kích hoạt camera hiện vào màn hình chiến thắng
     }
 }

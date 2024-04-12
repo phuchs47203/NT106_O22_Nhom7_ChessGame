@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Knight : ChessPiece
@@ -11,11 +11,13 @@ public class Knight : ChessPiece
         {
             for (int y = this.currentY - 2; y <= this.currentY + 2; y++)
             {
+                // neeuvij trí có hàng dọc hoặc hàng ngag trùng thi loại vì con ngựa đâu đi dọc/ngang được
                 if (x == this.currentX || y == this.currentY) continue;
 
-                Vector2Int nextMove = new Vector2Int(x, y);
+                Vector2Int nextMove = new Vector2Int(x, y); 
                 Vector2Int moveDir = nextMove - new Vector2Int(this.currentX, this.currentY);
 
+                //cái này không cần gọi đệ quy nên phải kiểm tra vị trí ngoài board , hay vị tri bị chặn
                 if (this.IsOutsideTheBoard(nextMove))
                     continue;
 

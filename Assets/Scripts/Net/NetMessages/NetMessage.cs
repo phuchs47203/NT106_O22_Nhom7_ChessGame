@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class NetMessage
 {
+    public NetMessage(string message)
+    {
+    }
+
     public OpCode Code { set; get; }
 
     public virtual void Serialize(ref DataStreamWriter writer)

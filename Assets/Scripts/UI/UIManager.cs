@@ -132,7 +132,7 @@ public class UIManager : MonoBehaviour
     {
         NetReady netReady = netMessage as NetReady;
 
-        //khimáy khách nhận được một thông điệp từ máy chủ rằng một người chơi đã sẵn sàng(thông điệp NetReady)
+        //khi máy khách nhận được một thông điệp từ máy chủ rằng một người chơi đã sẵn sàng(thông điệp NetReady)
         //   nó sẽ cập nhật trạng thái của toggle tương ứng với đội của người chơi đó.
         this.toggles[(int)netReady.ReadyTeam].isOn = !this.toggles[(int)netReady.ReadyTeam].isOn;
 

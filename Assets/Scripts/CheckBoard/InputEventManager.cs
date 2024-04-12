@@ -9,7 +9,7 @@ public class InputEventManager : MonoBehaviour
         Singleton = this;
     }
 
-    // Mouse
+    // kh?i t?o các s? ki?n chu?t
     public event Action onLeftMouseButtonDown;
     public event Action onLeftMouseButtonUp;
     public event Action onLeftMouseButtonHold;

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Rook : ChessPiece
@@ -29,12 +29,12 @@ public class Rook : ChessPiece
         {
             for (int y = this.currentY - 1; y <= this.currentY + 1; y++)
             {
-                if (x == this.currentX && y == this.currentY) continue;
+                if (x == this.currentX && y == this.currentY) continue; // đmả bảo không trùng current
 
                 Vector2Int nextMove = new Vector2Int(x, y);
                 Vector2Int moveDir = nextMove - new Vector2Int(this.currentX, this.currentY);
 
-                if (moveDir.x == moveDir.y || moveDir.x + moveDir.y == 0) continue;
+                if (moveDir.x == moveDir.y || moveDir.x + moveDir.y == 0) continue; // đmả bảo con xe không đi xéo
 
                 this.AddedMoveRecursivelly(ref allPossibleMoveList, ref this.capturableMoveList, nextMove, moveDir);
             }

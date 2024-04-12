@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class King : ChessPiece
@@ -33,6 +33,8 @@ public class King : ChessPiece
                 if (x == this.currentX && y == this.currentY) continue;
 
                 Vector2Int nextMove = new Vector2Int(x, y);
+
+                //cái này không cần gọi đệ quy nên phải kiểm tra vị trí ngoài board , hay vị tri bị chặn
 
                 if (this.IsOutsideTheBoard(nextMove)) continue;
 
