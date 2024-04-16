@@ -3,6 +3,8 @@ using Unity.Collections;
 using Unity.Networking.Transport;
 using UnityEngine;
 
+// thuộc Volumn MenuUIManager. Ngoài ra, Server và Client script cũng được add vào trong volumn MenuUI
+
 public class Server : MonoBehaviour
 {
     public static Server Singleton { get; private set; }
@@ -29,6 +31,7 @@ public class Server : MonoBehaviour
         NetworkEndPoint endPoint = NetworkEndPoint.AnyIpv4;
         endPoint.Port = port;
 
+        // bind driver với endpoint coi được không
         if (this.driver.Bind(endPoint) != 0)
         {
             Debug.Log($"Unable to bind to port {endPoint.Port}");
@@ -41,7 +44,7 @@ public class Server : MonoBehaviour
         }
 
         this.connections = new NativeList<NetworkConnection>(2, Allocator.Persistent);
-        this.isActive = true;
+        this.isActive = true; // đã sẵn sang flanwgs nghe
     }
 
     //khi server đóng thì giải phóng tìa nguyên, xóa các dnah sách kết nối
@@ -68,13 +71,13 @@ public class Server : MonoBehaviour
     {
         if (!this.isActive) return;
 
-        this.KeepAlive();
+        this.KeepAlive(); // gửi các gói tin keep alive định kỳ đến các máy khách để duy trì kết nối, đma rbaor không bị gián đoạn với tần xuất cố định
 
-        this.driver.ScheduleUpdate().Complete();
+        this.driver.ScheduleUpdate().Complete(); // lên lịch cập nhật, completw() đmả bỏa cập nhật hoàn thành trước khi có sự kiện khác
 
-        this.CleanupConnections();
-        this.AcceptNewConnections();
-        this.UpdateMessagePump();
+        this.CleanupConnections(); // loại bỏ kết nối không hợp lệ
+        this.AcceptNewConnections(); // chấp nhận kêt snoois mới
+        this.UpdateMessagePump(); // cập nhật các message lkiene tục được nhận từ client
     }
 
     // duy trì kết nối, đảm bảo không bị gián đoạn, tần số gửi keep alive pahri nahats định đe duy trì kết nối, dùng tỏng việc két nối liên tục
@@ -100,7 +103,7 @@ public class Server : MonoBehaviour
         }
     }
 
-    // khi có client yêu cầu eket snoois thì cái này sẽ chấp nhận kết nối đó và add vào list
+    // khi có client yêu cầu kết nối thì cái này sẽ chấp nhận kết nối đó và add vào connections
     private void AcceptNewConnections()
     {
         NetworkConnection c;
@@ -121,12 +124,13 @@ public class Server : MonoBehaviour
 
             // lấy sự keienj mạng tiếp theo cho kết nối hiện tại
             // đọc dữ liệu vào stream reader
+            // Thông thường chỉ cần một kết noisvaof server là đủ đẻ chơi game, nhưng nếu có những client khác cũng kết nối đến server, thì nó sẽ add vào list chờ
             while ((cmd = this.driver.PopEventForConnection(this.connections[i], out streamReader)) != NetworkEvent.Type.Empty)
             {
                 switch (cmd)
                 {
                     case NetworkEvent.Type.Data:
-                        NetUtility.OnData(streamReader, this.connections[i], this); // gọi hàm Ondata trong class netUnity
+                        NetUtility.OnData(streamReader, this.connections[i], this); // gọi hàm Ondata trong class netUnity// để gọi các mesage thông báo đến tất cả client
                         break;
 
                     case NetworkEvent.Type.Disconnect: // 1 trong 2 người chơi ngắt kết nối thì shutdown server 

@@ -16,6 +16,7 @@ public enum Turn
     Other
 }
 
+//thuộc volumn GameStateManager
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Singleton { get; private set; }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+// thuộc Volumn MenuUIManager. Ngoài ra, Server và Client script cũng được add vào trong volumn MenuUI
 public class MenuUIManager : MonoBehaviour
 {
     [SerializeField] private Animator menuUIAnim;

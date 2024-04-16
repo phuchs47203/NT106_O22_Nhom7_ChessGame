@@ -53,7 +53,7 @@ public abstract class ChessPiece : MonoBehaviour
 
     public void SelectClient(Vector2Int selectedPosition)
     {
-        Client.Singleton.SendToServer(new NetPieceSelected(selectedPosition.x, selectedPosition.y)); // client đi một nước đi thì gửi cho bên server bietes nước đi đó
+        Client.Singleton.SendToServer(new NetPieceSelected(selectedPosition.x, selectedPosition.y)); 
     }
 
     public void SelectServer(Vector2Int selectedPosition)

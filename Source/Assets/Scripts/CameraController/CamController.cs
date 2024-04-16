@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Những cái này được cấu hình cho 3 camera
+// Thuộc volumn CameraController Unity
+// Cái này gọi các NetUNITy, mà netUNIty lại gọi các NetMessage
 public class CamController : MonoBehaviour
 {
     public static CamController Singleton { get; private set; }

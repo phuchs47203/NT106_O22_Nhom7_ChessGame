@@ -1,4 +1,4 @@
-using Unity.Networking.Transport;
+﻿using Unity.Networking.Transport;
 
 public class NetPieceSelected : NetMessage
 {
@@ -17,6 +17,7 @@ public class NetPieceSelected : NetMessage
         this.Deserialize(reader);
     }
 
+    // ghi dữ liệu vào luồng mạng đó, sau đó gửi nó đi
     public override void Serialize(ref DataStreamWriter writer)
     {
         base.Serialize(ref writer);

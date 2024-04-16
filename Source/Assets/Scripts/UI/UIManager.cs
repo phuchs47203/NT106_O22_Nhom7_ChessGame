@@ -6,11 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
+//Ở trong In Game UI của unity (hyerarchy)
 public class UIManager : MonoBehaviour
 {
     public static UIManager Singleton { get; private set; }
     [SerializeField] private Image currentTurnUI; // hình ảnh hiển thị màu của lượt đi hiện tại
-    [SerializeField] private GameObject endGameCanvasUI; // hiện giao diện khi kết thúc trò chơi
+    [SerializeField] private GameObject endGameCanvasUI; // Khi mà có người chơi vào thì tạo một gameobject
     [SerializeField] private Toggle[] toggles; // cờ hiệu đẻ biết cá nhận sẵn sàng hay chưa
     [SerializeField] private Button resetButton; // nút hởi động lại trò chơi
     [SerializeField] private Material blueTeamMaterial; // list các material của team xanh
@@ -77,6 +78,7 @@ public class UIManager : MonoBehaviour
     private void registerEvents(bool confirm)
     {
         // thêm mưới sự kiện hoạc bỏ id sự keienj đó
+        // khi game bát đầu sẽ được gọi
         if (confirm)
         {
             ChessBoard.Singleton.onTurnSwitched += OnTurnSwitched;
@@ -157,7 +159,7 @@ public class UIManager : MonoBehaviour
         GameStateManager.Singleton.UpdateGameState(GameState.Reset, null);
         foreach (Toggle toggle in this.toggles)
         {
-            toggle.isOn = false; // set laijc ác toggle là false
+            toggle.isOn = false; // set lại các toggle là false
         }
         InputEventManager.Singleton.onSpacePressDown -= OnSpaceButtonPressDown;
     }

@@ -23,6 +23,8 @@ public class InputEventManager : MonoBehaviour
 
     private void Update()
     {
+        //khi nút chuột trái được nhấn xuống(Input.GetMouseButtonDown(0)),
+        //sự kiện onLeftMouseButtonDown sẽ được kích hoạt bằng cách gọi Invoke(), hàm đó được thực hiện bên chesboard
         if (Input.GetMouseButtonDown(0)) // chuột trái
             this.onLeftMouseButtonDown?.Invoke();
 
@@ -41,6 +43,7 @@ public class InputEventManager : MonoBehaviour
         if (Input.GetMouseButton(1))
             this.onRightMouseButtonHold?.Invoke();
 
+        // sự kiện thứ 2 dược triển khai
         if (Input.GetKeyDown(KeyCode.Space))
         {
             this.onSpacePressDown?.Invoke();

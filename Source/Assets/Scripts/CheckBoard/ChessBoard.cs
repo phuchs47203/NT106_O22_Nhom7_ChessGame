@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Networking.Transport;
 
+// Chesboard, Deadlist, ChessBoardConfiguration, InputEventMange đều nàm trong volumn Chesboard
 public enum Team
 {
     Blue = 0,
@@ -53,7 +54,7 @@ public class ChessBoard : MonoBehaviour
     private int TILE_COUNT_Y;
     private GameObject[,] tiles;
     private Camera currentCamera;
-    private Vector2Int currentHover;
+    private Vector2Int currentHover; // vị trí hover
     private Vector3 bounds;
 
     // For events
@@ -100,11 +101,12 @@ public class ChessBoard : MonoBehaviour
         this.InitializeValues();
 
         this.GenerateAllTiles(this.tileSize, this.TILE_COUNT_X, this.TILE_COUNT_Y);
-        this.SpawnAllPieces();
+        this.SpawnAllPieces(); // khởi tạo các quân cờ cho 2 đội 
         this.PositionAllPieces();
 
         this.deadList.SetupDeadList(GetTileCenter(new Vector2Int(8, -1)), this.GetTileCenter(new Vector2Int(-1, 8)), this.tileSize, transform.forward);
 
+        // khi sart xong thì sẽ thêm input event để xử lí cho các sự kiện, event của chuột
         GameStateManager.Singleton.OnGameStateChanged += this.OnGameStateChanged;
         InputEventManager.Singleton.onLeftMouseButtonDown += this.OnLeftMouseButtonDown;
     }
@@ -117,36 +119,43 @@ public class ChessBoard : MonoBehaviour
     }
     private void Update()
     {
+        // camera giám sát để liên tục cập nhật các vị trí con chuột trên bàn cờ
         if (!this.currentCamera)
         {
             this.currentCamera = Camera.main;
             return;
         }
 
+        //ray là một tia xuất phát từ camera nhìn vào con trỏ chuột
+
+        //sử dụng phương thức Physics.Raycast() để kiểm tra xem ray đã va chạm với bất kỳ đối tượng nào không
+        //Nếu có va chạm, nó lưu thông tin về va chạm vào biến info.
         RaycastHit info;
-        Ray ray = this.currentCamera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = this.currentCamera.ScreenPointToRay(Input.mousePosition); // đầu vào là mouse
         if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask(this.layerList.ToArray())))
         {
             // Get the indexes of the hit tile
-            Vector2Int hitPosition = this.LookupTileIndex(info.transform.gameObject);
+            Vector2Int hitPosition = this.LookupTileIndex(info.transform.gameObject); // lưu vị trí đó vòa hítPosition
 
-            // If we're hovering a tile after not hovering any tiles
+            // If we're hovering a tile after not hovering any tiles, nếu không có ô nào được hover trước đó
             if (this.currentHover == -Vector2Int.one)
             {
-                this.currentHover = hitPosition;
-                this.tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer(this.hoverLayer);
+                this.currentHover = hitPosition; // gán curent hover
+                this.tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer(this.hoverLayer); // đổi layer của ô đó thành hover layer
             }
 
             // If we were already hovering a tile, change the previous one
             if (this.currentHover != -Vector2Int.one)
             {
-                this.tiles[this.currentHover.x, this.currentHover.y].layer = LayerMask.NameToLayer(this.tileLayer);
-                this.currentHover = hitPosition;
-                this.tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer(this.hoverLayer);
+                this.tiles[this.currentHover.x, this.currentHover.y].layer = LayerMask.NameToLayer(this.tileLayer); // trả lại layer cũ cho ô đã hover trước đó
+                this.currentHover = hitPosition; // thêm layer hover cho ô hover hiện tại
+                this.tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer(this.hoverLayer); // dổi tiel layer cho ô hiện tại
             }
         }
         else
         {
+            //không có va chạm với đối tượng nào hết
+            // nếu tước đó hover rồi, mà sau đó lại di chuột ra ngoài bàn cờ thì xóa hover đi
             if (this.currentHover != -Vector2Int.one)
             {
                 this.tiles[this.currentHover.x, this.currentHover.y].layer = LayerMask.NameToLayer(this.tileLayer);
@@ -218,26 +227,33 @@ public class ChessBoard : MonoBehaviour
     }
 
 
+    // sự kiện quan tọng, nhapas vòa quân cờ trên bàn cờ 
     private void OnLeftMouseButtonDown()
     {
-        // If this is not our turn
+        // If this is not our turn, nếu mà nhấn vào ô khii không phải lượt của mình thì return
         if (this.currentTurn != this.playerTeam) return;
 
         // If the select outside of the board
         if (this.currentHover == -Vector2Int.one)
         {
             // If currentSelectedPiece is selected
+            // Nếu trước đó mà nhấp một quân cờ rồi, nhấp tiếp ra ngoài bàn cờ thì hủy sự kiện bằng cách cho vector --Vector2Int.one
             if (this.currentSelectedPiece.IsNotNull)
                 this.currentSelectedPiece.SelectClient(-Vector2Int.one);
-
+            // nếu chưa có quân cờ được chọn thì hủy sự kiện
             return;
         }
 
+
+        // Nếu nơi hover không có quân cờ nào thì kiểm tra nước đi hợp lệ và di chuyển vào đó
+        
         if (this.chessPieces[this.currentHover.x, this.currentHover.y].IsNull)
         {
             // If currentSelectedPiece is selected
+            // nếu trước đó có quân cờ đang được chọn, và chech coi có thẻ di chuyển tới this.curenthove  không
             if (this.currentSelectedPiece.IsNotNull)
             {
+                // hỏi coi có được di chuyển vào đây không
                 if (this.CanCurrentSelectedPieceMoveHere(this.currentHover))
                 {
                     this.SendMovePieceToServer();
@@ -246,7 +262,9 @@ public class ChessBoard : MonoBehaviour
         }
         else
         {
-            // If chessPiece at currentHover is not our team piece
+            // nơi hover có quân cờ ở đó
+            // If chessPiece at currentHover is not our team piece/ nếu chỗ hover tiếp theo không phải team của mình
+            // xem xét là ăn được hay không 
             if (this.chessPieces[this.currentHover.x, this.currentHover.y].team != this.playerTeam)
             {
                 if (this.currentSelectedPiece.IsNull) return;
@@ -254,7 +272,7 @@ public class ChessBoard : MonoBehaviour
                 if (this.CanCurrentSelectedPieceMoveHere(this.currentHover))
                 {
                     if (this.chessPieces[this.currentHover.x, this.currentHover.y].pieceType == ChessPieceType.King)
-                        Client.Singleton.SendToServer(new NetVictoryClaim(this.currentTurn));
+                        Client.Singleton.SendToServer(new NetVictoryClaim(this.currentTurn)); // nếu mà ăn là vua thì tuyên bố chiến thắng
 
                     Debug.Log($"{this.currentSelectedPiece.pieceType.ToString()} killed {this.chessPieces[this.currentHover.x, this.currentHover.y].pieceType.ToString()}");
 
@@ -263,13 +281,15 @@ public class ChessBoard : MonoBehaviour
                     return;
                 }
             }
-            else
+            else // nếu đó là team của mình
             {
+                // nếu có quân được chọn trước đó, thì return;
                 if (this.currentSelectedPiece.IsNotNull)
                 {
                     this.currentSelectedPiece.SelectClient(-Vector2Int.one);
+                    // nếu chỗ đó có quân cờ của mình rồi, thì không được đi tới đó, return;
                 }
-                else
+                else // nếu trước đó không có quân được chọn thì nhấc nó lên, set curentselectedPiece tại vị trí hover
                 {
                     this.currentSelectedPiece.SelectClient(this.currentHover);
                 }
@@ -522,12 +542,7 @@ public class ChessBoard : MonoBehaviour
         Server.Singleton.BroadCast(netPieceSelected);
     }
 
-    private void OnMakeMoveServer(NetMessage netMessage, NetworkConnection sender)
-    {
-        NetMakeMove netMakeMove = netMessage as NetMakeMove;
 
-        Server.Singleton.BroadCast(netMakeMove);
-    }
 
     private void OnVictoryClaimServer(NetMessage netMessage, NetworkConnection sender)
     {
@@ -549,7 +564,7 @@ public class ChessBoard : MonoBehaviour
 
     private void OnStartGameClient(NetMessage message)
     {
-        this.onGameStart?.Invoke(this.playerTeam);
+        this.onGameStart?.Invoke(this.playerTeam); // chuyển qua MenuUIManager gọi hàm onGameStart(), chuyển sang giao diện INGameUI
     }
 
     private void OnPieceSelectedClient(NetMessage message)
@@ -568,6 +583,7 @@ public class ChessBoard : MonoBehaviour
         }
     }
 
+    // xử lí sự kiện di chuyển
     private void OnMakeMoveClient(NetMessage message)
     {
         NetMakeMove netMakeMove = message as NetMakeMove;
@@ -580,7 +596,12 @@ public class ChessBoard : MonoBehaviour
         this.currentSelectedPiece.SetPieceSelect();
         this.currentSelectedPiece = this.nullPiece;
     }
+    private void OnMakeMoveServer(NetMessage netMessage, NetworkConnection sender)
+    {
+        NetMakeMove netMakeMove = netMessage as NetMakeMove;
 
+        Server.Singleton.BroadCast(netMakeMove);
+    }
     private void OnVictoryClaimClient(NetMessage netMessage)
     {
         NetVictoryClaim netVictoryClaim = netMessage as NetVictoryClaim;

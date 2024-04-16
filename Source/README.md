@@ -1,10 +1,9 @@
-Trần Hoàng Phúc 21522479
+first
 
+Clone về
 
-Lê Bá Nhất Long 21522300.
+Mở trong trong unity
 
+Chạy 2 lần để tạo các client, có thể chạy nhiều lần
+File->Build and Run
 
-Nguyễn Việt Hoàng 21522095.
-
-
-# NT106_O22_Nhom7_ChessGameeee

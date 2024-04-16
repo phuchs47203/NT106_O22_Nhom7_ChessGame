@@ -1,5 +1,6 @@
-using Unity.Networking.Transport;
+﻿using Unity.Networking.Transport;
 
+// tin nhắn team chiến thắng là team nào
 public class NetVictoryClaim : NetMessage
 {
     public Team VictoryTeam { set; get; }
