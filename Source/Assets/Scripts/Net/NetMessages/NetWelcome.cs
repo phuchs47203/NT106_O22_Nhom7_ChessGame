@@ -39,4 +39,14 @@ public class NetWelcome : NetMessage
 
         NetUtility.S_WELCOME?.Invoke(this, cnn);
     }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.WELCOME;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.WELCOME);
+    }
 }

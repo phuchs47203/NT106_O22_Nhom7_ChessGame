@@ -213,10 +213,6 @@ public abstract class ChessPiece : MonoBehaviour
                 : false;
     }
 
-
-
-
-
     public void Choose_Piece()
     {
         if (this.IsSelected)

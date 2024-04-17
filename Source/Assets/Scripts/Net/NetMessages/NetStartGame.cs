@@ -35,4 +35,14 @@ public class NetStartGame : NetMessage
 
         NetUtility.S_START_GAME?.Invoke(this, cnn);
     }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.READY;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.READY);
+    }
 }

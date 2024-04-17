@@ -42,4 +42,14 @@ public class NetVictoryClaim : NetMessage
 
         NetUtility.S_VICTORY_CLAIM?.Invoke(this, cnn);
     }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.VICTORY_CLAIM;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.VICTORY_CLAIM);
+    }
 }

@@ -60,4 +60,16 @@ public class NetMakeMove : NetMessage
 
         NetUtility.S_MAKE_MOVE?.Invoke(this, cnn);
     }
+    private void Porcessing(NetworkConnection cnn, DataStreamReader rd)
+    {
+        this.NextX = rd.ReadInt();
+        this.NextY = rd.ReadInt();
+        this.killConfirm = (KillConfirm)rd.ReadInt();
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr); 
+
+        wr.WriteInt(this.NextX);
+        wr.WriteInt(this.NextY);
+        wr.WriteInt((int)this.killConfirm);
+    }
 }

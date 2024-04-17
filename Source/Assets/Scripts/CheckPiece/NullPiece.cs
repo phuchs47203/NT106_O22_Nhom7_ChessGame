@@ -17,4 +17,5 @@ public class NullPiece : ChessPiece
     {
         return new List<Vector2Int>();
     }
+
 }

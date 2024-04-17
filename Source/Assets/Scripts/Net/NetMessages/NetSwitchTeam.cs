@@ -37,4 +37,14 @@ public class NetSwitchTeam : NetMessage
 
         NetUtility.S_SWITCH_TEAM?.Invoke(this, cnn);
     }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.SWITCH_TEAM;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.SWITCH_TEAM);
+    }
 }

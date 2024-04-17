@@ -44,7 +44,7 @@ public class NetPieceSelected : NetMessage
 
         NetUtility.S_PIECE_SELECTED?.Invoke(this, cnn);
     }
-    public void Porcessing(NetworkConnection cnn, DataStreamReader rd)
+    private void Porcessing_Data(NetworkConnection cnn, DataStreamReader rd)
     {
         this.currentY = rd.ReadInt();
         this.currentX = rd.ReadInt();

@@ -45,4 +45,14 @@ public class NetReady : NetMessage
 
         NetUtility.S_READY?.Invoke(this, cnn);
     }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+       
+        this.Code = OpCode.READY;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.READY);
+    }
 }

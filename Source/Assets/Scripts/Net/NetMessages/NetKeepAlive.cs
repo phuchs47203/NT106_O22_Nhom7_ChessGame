@@ -3,8 +3,6 @@ using Unity.Networking.Transport;
 
 public class NetKeepAlive : NetMessage
 {
-
-
     public NetKeepAlive()
     {
         this.Code = OpCode.KEEP_ALIVE;// gán mã code của keep alive

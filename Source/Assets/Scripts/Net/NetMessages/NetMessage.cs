@@ -28,4 +28,8 @@ public class NetMessage
     {
 
     }
+    protected virtual void Porcessing_Data(NetworkConnection cnn, DataStreamReader red)
+    {
+
+    }
 }
