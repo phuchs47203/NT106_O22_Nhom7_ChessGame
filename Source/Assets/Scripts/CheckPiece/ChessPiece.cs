@@ -29,7 +29,7 @@ public abstract class ChessPiece : MonoBehaviour
     [HideInInspector] public bool isBeingAttackedByRed;
 
     protected List<Vector2Int> validMoveList; // danh sách các nước đi có nghĩa cảu mỗi quan cờ
-    protected List<Vector2Int> capturableMoveList; // danh sách vụ trí mà có thể bắt được
+    protected List<Vector2Int> capturableMoveList; // danh sách vị trí mà có thể bắt được
 
     // For null checking
     public bool IsNull => this.pieceType == ChessPieceType.NullPiece ? true : false;
@@ -212,10 +212,6 @@ public abstract class ChessPiece : MonoBehaviour
             (ChessBoard.Singleton.chessPieces[targetMove.x, targetMove.y].team != this.team ? true : false)
                 : false;
     }
-
-
-
-
 
     public void Choose_Piece()
     {

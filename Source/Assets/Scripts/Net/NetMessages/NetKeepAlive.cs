@@ -3,8 +3,6 @@ using Unity.Networking.Transport;
 
 public class NetKeepAlive : NetMessage
 {
-
-
     public NetKeepAlive()
     {
         this.Code = OpCode.KEEP_ALIVE;// gán mã code của keep alive
@@ -12,7 +10,7 @@ public class NetKeepAlive : NetMessage
     public NetKeepAlive(DataStreamReader reader)
     {
         this.Code = OpCode.KEEP_ALIVE;
-        this.Deserialize(reader); // gọi phương thwucs giả mã dữ liệu nhận được
+        this.Deserialize(reader); // gọi phương thức giải mã dữ liệu nhận được
     }
 
     public override void Serialize(ref DataStreamWriter writer)

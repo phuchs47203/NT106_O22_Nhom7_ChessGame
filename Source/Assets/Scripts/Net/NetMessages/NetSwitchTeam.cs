@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Networking.Transport;
 using UnityEngine;
 
+// đổi team
 public class NetSwitchTeam : NetMessage
 {
     public NetSwitchTeam()
@@ -36,5 +37,15 @@ public class NetSwitchTeam : NetMessage
         base.ReceivedOnServer(cnn);
 
         NetUtility.S_SWITCH_TEAM?.Invoke(this, cnn);
+    }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.SWITCH_TEAM;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.SWITCH_TEAM);
     }
 }

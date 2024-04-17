@@ -23,8 +23,8 @@ public class GameStateManager : MonoBehaviour
 
     public event Action<GameState, Turn> OnGameStateChanged; // sự kiện trạng thái game thay đổi
     public event Action<Turn> OnSwitchTurn; // sự kiện chuyển lượt đi
-    private GameState currentState; // lưu trữ trạng thái hiện tại là đang chơi, thắng, hya là reset
-    private Turn currentTurn; // lưu trữ lượt đi hiện tịa của một client là của chính họ hay là người choi khác
+    private GameState currentState; // lưu trữ trạng thái hiện tại là đang chơi, thắng, hay là reset
+    private Turn currentTurn; // lưu trữ lượt đi hiện tịa của một client là của chính họ hay là người chơi khác
 
 
     private void Awake()

@@ -13,7 +13,7 @@ public class Server : MonoBehaviour
         Singleton = this;
     }
 
-    public NetworkDriver driver; // đối tượng đưuọc khởi tạo để quản lí một kết nối mạng
+    public NetworkDriver driver; // đối tượng được khởi tạo để quản lí một kết nối mạng
     private NativeList<NetworkConnection> connections; // lưu trữ các dnah sách kêt nối mạng
 
     private bool isActive = false; // keiemr tra coi server còn hoạt động hay không

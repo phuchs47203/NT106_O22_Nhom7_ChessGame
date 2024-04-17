@@ -1,5 +1,6 @@
 ﻿using Unity.Networking.Transport;
 
+// xử lí khi có quân cờ được chọn
 public class NetPieceSelected : NetMessage
 {
     public int currentX { set; get; }
@@ -44,7 +45,7 @@ public class NetPieceSelected : NetMessage
 
         NetUtility.S_PIECE_SELECTED?.Invoke(this, cnn);
     }
-    public void Porcessing(NetworkConnection cnn, DataStreamReader rd)
+    private void Porcessing_Data(NetworkConnection cnn, DataStreamReader rd)
     {
         this.currentY = rd.ReadInt();
         this.currentX = rd.ReadInt();

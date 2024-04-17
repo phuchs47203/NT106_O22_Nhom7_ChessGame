@@ -35,7 +35,7 @@ public class MenuUIManager : MonoBehaviour
     public void OnLocalGameBtnClicked()
     {
         Debug.Log("Local Game");
-        menuUIAnim.SetTrigger("InGameUI"); // khi click vào thì chueyern sang giao diện InGameUI
+        menuUIAnim.SetTrigger("InGameUI"); // khi click vào thì chuyển sang giao diện InGameUI
 
         server.Init(8007);
         client.Init("127.0.0.1", 8007);

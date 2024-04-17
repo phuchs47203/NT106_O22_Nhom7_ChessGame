@@ -5,7 +5,7 @@ using UnityEngine;
 
 // tương tự như các sự kiện kia
 // gửi message là team nào đã sẵn sàng
-// ex: team red sanex sàng, đag chờ người ta chơi với nos
+// ex: team red sẵn sàng, đag chờ người ta chơi với nos
 public class NetReady : NetMessage
 {
     public Team ReadyTeam { set; get; }
@@ -44,5 +44,15 @@ public class NetReady : NetMessage
         base.ReceivedOnServer(cnn);
 
         NetUtility.S_READY?.Invoke(this, cnn);
+    }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+       
+        this.Code = OpCode.READY;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.READY);
     }
 }

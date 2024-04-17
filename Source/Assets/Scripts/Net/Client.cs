@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Networking.Transport;
 using UnityEngine;
-//Unity Networking Transport hỗ trợ cả TCP và UDP,
-//tùy thuộc vào cách  cấu hình NetworkDriver.
-//Mặc định, nó sử dụng UDP. Để sử dụng TCP thay vì UDP,  cần cấu hình NetworkDriver để sử dụng TCP thay vì UDP.
+// Unity Networking Transport hỗ trợ cả TCP và UDP,
+// Tùy thuộc vào cách  cấu hình NetworkDriver.
+// Mặc định, nó sử dụng UDP. Để sử dụng TCP thay vì UDP,  cần cấu hình NetworkDriver để sử dụng TCP thay vì UDP.
 
-// keep alive được gửi liên tục, để đmả bảo ràng kết nối vẫn còn haojt động, gói kêp alive không cần có dữ liệu, chỉ đẻ nhận beiets thôi
+// keep alive được gửi liên tục, để đmả bảo ràng kết nối vẫn còn hoạt động, gói kêp alive không cần có dữ liệu, chỉ đẻ nhận beiets thôi
 // Nếu một kêt snoois bị gián đonạ, có thhể kịp thời phát hiện và duy trì 
 
 // thuộc Volumn MenuUIManager. Ngoài ra, Server và Client script cũng được add vào trong volumn MenuUI

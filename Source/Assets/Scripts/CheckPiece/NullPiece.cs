@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// quân cờ null
 public class NullPiece : ChessPiece
 {
     protected override void Awake()
@@ -17,4 +18,5 @@ public class NullPiece : ChessPiece
     {
         return new List<Vector2Int>();
     }
+
 }

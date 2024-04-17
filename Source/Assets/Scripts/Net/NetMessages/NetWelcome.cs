@@ -1,6 +1,6 @@
 ﻿using Unity.Networking.Transport;
 
-// dùng trong local game, nhấp vòa thì ra màn hình welcom, gửi mesage là team anof đã vào màn hình  welcom
+// dùng trong local game, nhấp vào thì ra màn hình welcom, gửi mesage là team anof đã vào màn hình  welcom
 public class NetWelcome : NetMessage
 {
     public Team AssignedTeam { set; get; }
@@ -38,5 +38,15 @@ public class NetWelcome : NetMessage
         base.ReceivedOnServer(cnn);
 
         NetUtility.S_WELCOME?.Invoke(this, cnn);
+    }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.WELCOME;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.WELCOME);
     }
 }
