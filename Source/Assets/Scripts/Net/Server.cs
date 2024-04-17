@@ -148,15 +148,60 @@ public class Server : MonoBehaviour
                 }
             }
         }
-    }
-    
+    }    
 
+   
+    // Server specific
+    // gửi thông điệp tới một client cụ thể
+    public void SendToClient(NetworkConnection connection, NetMessage msg)
+    {
+        DataStreamWriter writer;
+        this.driver.BeginSend(connection, out writer);
+        msg.Serialize(ref writer);
+        this.driver.EndSend(writer);
+    }
+
+    public void BroadCast(NetMessage msg)
+    {
+        for (int i = 0; i < this.connections.Length; i++)
+        {
+            if (this.connections[i].IsCreated)
+            {
+                Debug.Log($"Sending {msg.Code} to: {this.connections[i].InternalId}");
+                this.SendToClient(this.connections[i], msg);
+            }
+        }
+    }
+    public void Handle_Move_Request(NetworkConnection connection, int pieceId, Vector2Int targetPosition, NetMessage msg)
+    {
+        bool isValidMove = Check__Validity(pieceId, targetPosition);
+
+        if (isValidMove)
+        {
+            UpdateBoard_State(pieceId, targetPosition);
+            
+        }
+        else
+        {
+            SendToClient(connection, msg);
+        }
+    }
+   
+    private bool Check__Validity(int pieceId, Vector2Int targetPosition)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void UpdateBoard_State(int pieceId, Vector2Int targetPosition)
+    {
+        throw new NotImplementedException();
+    }
     private void Process_Netwotk_Events(NetworkEvent.Type eventType, DataStreamReader streamReader, NetworkConnection connection)
     {
         switch (eventType)
         {
             case NetworkEvent.Type.Data:
-                NetUtility.OnData(streamReader, connection, this); // Gọi hàm OnData trong class NetUtility
+                NetUtility.OnData(streamReader, connection, this);
                 break;
 
             case NetworkEvent.Type.Disconnect:
@@ -191,55 +236,5 @@ public class Server : MonoBehaviour
                 Process_Netwotk_Events(cmd, streamReader, this.connections[i]);
             }
         }
-    }
-    // Server specific
-    // gửi thông điệp tới một client cụ thể
-    public void SendToClient(NetworkConnection connection, NetMessage msg)
-    {
-        DataStreamWriter writer;
-        this.driver.BeginSend(connection, out writer);
-        msg.Serialize(ref writer);
-        this.driver.EndSend(writer);
-    }
-
-    // gửi thông điệp tới tấ cả các client dndag kết nối
-    public void BroadCast(NetMessage msg)
-    {
-        for (int i = 0; i < this.connections.Length; i++)
-        {
-            if (this.connections[i].IsCreated)
-            {
-                Debug.Log($"Sending {msg.Code} to: {this.connections[i].InternalId}");
-                this.SendToClient(this.connections[i], msg);
-            }
-        }
-    }
-    public void Handle_Move_Request(NetworkConnection connection, int pieceId, Vector2Int targetPosition, NetMessage msg)
-    {
-        // Kiểm tra tính hợp lệ của nước đi
-        bool isValidMove = Check__Validity(pieceId, targetPosition);
-
-        if (isValidMove)
-        {
-            // Cập nhật trạng thái bàn cờ
-            UpdateBoard_State(pieceId, targetPosition);
-
-            
-        }
-        else
-        {
-            // Gửi thông báo về việc nước đi không hợp lệ cho client gửi yêu cầu
-            SendToClient(connection, msg);
-        }
-    }
-   
-    private bool Check__Validity(int pieceId, Vector2Int targetPosition)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void UpdateBoard_State(int pieceId, Vector2Int targetPosition)
-    {
-        throw new NotImplementedException();
     }
 }

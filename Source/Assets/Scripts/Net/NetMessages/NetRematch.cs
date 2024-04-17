@@ -34,5 +34,15 @@ public class NetRematch : NetMessage
 
         NetUtility.S_REMATCH?.Invoke(this, cnn);
     }
+    private void Porcessing_date(NetworkConnection cnn, DataStreamReader rd)
+    {
+
+        this.Code = OpCode.REMATCH;
+        DataStreamWriter wr = (new DataStreamWriter());
+        base.Serialize(ref wr);
+        base.ReceivedOnServer(cnn);
+
+        wr.WriteInt((int)OpCode.REMATCH);
+    }
 }
 

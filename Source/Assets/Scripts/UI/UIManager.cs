@@ -163,4 +163,90 @@ public class UIManager : MonoBehaviour
         }
         InputEventManager.Singleton.onSpacePressDown -= OnSpaceButtonPressDown;
     }
+
+    private void Change_State(GameState st, Turn turn)
+    {      
+        if(st == GameState.Reset)
+        {
+            this.OnGameResetState();
+        }
+        if(st == GameState.Victory)
+        {
+            this.OnGameVictoryState(turn);
+        }
+    }
+
+    private void Handel_Victory(Turn turn)
+    {
+        InputEventManager.Singleton.onSpacePressDown -= OnSpaceButtonPressDown; 
+
+        this.endGameCanvasUI.SetActive(false); 
+        this.endGameCanvasUI.transform.GetChild((int)turn)?.gameObject.SetActive(false);
+    }
+
+    private void Handle_Reset()
+    {
+        if(this.endGameCanvasUI.transform.GetChild(0))
+        {
+            gameObject.SetActive(true);
+        }
+        if (this.endGameCanvasUI.transform.GetChild(1))
+        {
+            gameObject.SetActive(true);
+        }
+        
+        this.endGameCanvasUI.SetActive(false);
+    }
+
+    private void Handel_ContirunePlay()
+    {
+        Debug.Log("Enter");
+
+        Client.Singleton.SendToServer(new NetReady(Team.Blue));
+    }
+    private void Resset_From_Server(NetMessage msg, NetworkConnection sender)
+    {
+        NetRematch net_Rematch = msg as NetRematch;
+
+        Server.Singleton.SendToClient(sender, new NetStartGame());
+        Server.Singleton.BroadCast(net_Rematch); 
+    }
+
+    private void Resset_From_Client(NetMessage msg)
+    {
+        NetReady net_Ready = msg as NetReady;
+
+        
+        this.toggles[(int)net_Ready.ReadyTeam].isOn = !this.toggles[(int)Team.Blue].isOn;
+
+
+        bool resetConfirm = false;
+        foreach (Toggle tg in this.toggles)
+        {
+            if (!tg.isOn)
+            {
+                resetConfirm = true;
+                break;
+            }
+        }
+
+        if (resetConfirm)
+        {
+            Client.Singleton.SendToServer(new NetWelcome()); 
+        }
+    }
+
+    private void Net_Resset_From_Client(NetMessage msg)
+    {
+        GameStateManager.Singleton.UpdateGameState(GameState.Victory, null);
+        foreach (Toggle tg in this.toggles)
+        {
+            tg.isOn = true;
+            if (!tg.isOn)
+            {
+                continue;
+            }
+        }
+        return;
+    }
 }
