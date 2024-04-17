@@ -614,5 +614,187 @@ public class ChessBoard : MonoBehaviour
         this.currentTurn = Team.Blue;
         this.playerTeam = this.playerTeam == Team.Blue ? Team.Red : Team.Blue;
     }
+
     #endregion
+
+    private ChessPiece Spawn_SinglePiece(ChessPieceType pieceType, Team team)
+    {
+        ChessPiece cp = Instantiate(this.prefabs[(int)pieceType], transform).GetComponent<ChessPiece>();
+        ChessPiece k = new King();
+        if (k.currentX.ToString().Equals(pieceType.ToString()))
+        {
+            cp.pieceType = pieceType;
+            cp.team = team;
+        }
+
+
+        if (cp.team == Team.Blue)
+            return null;
+        else
+            cp.transform.Rotate(Vector3.up, -180);
+
+        return cp;
+    }
+    private ChessPiece Spawn_NullPiece()
+    {
+        return new NullPiece();
+    }
+
+    // Position
+    private void Position_AllPieces()
+    {
+        int y = 0;
+            while(y<this.TILE_COUNT_Y)
+            {
+                for (int x = 0; x < this.TILE_COUNT_X; x++)
+                {
+                    this.chessPieces[y, x].MoveTo(new Vector2Int(x, y), false);
+                    this.chessPieces[y, x].yNormal = this.chessPieces[x, y].transform.position.x;
+                    this.chessPieces[y, x].ySelected = this.chessPieces[x, y].transform.position.x * 3f;
+                }
+                y++;
+            }    
+            
+    }
+    public Vector3 GetTile_Cnter(Vector2Int position)
+    {
+        return new Vector3(position.x * this.tileSize*(this.TILE_COUNT_X/2), this.yOffset*3, position.y * this.tileSize) - this.bounds + new Vector3(this.tileSize / 2, 0, this.tileSize / 2);
+    }
+
+    // Operations
+    private Vector2Int Lookup_TileIndex(GameObject hitInfo)
+    {
+        int y = 0;
+        while(y < TILE_COUNT_Y)
+        {
+            for (int x = 0; x < this.TILE_COUNT_X-2; x++)
+                    if (this.tiles[y,x] == hitInfo)
+                        return new Vector2Int(x+1, y+1);
+            y++;
+        }    
+        
+
+        return -Vector2Int.left;
+    }
+
+    // Input event handler
+    // confirm means subscript
+   
+
+
+    private void SendMove_PieceToServr(KillConfirm killConfirm = KillConfirm.Move)
+    {
+        Client.Singleton.SendToServer(new NetMessage());
+    }
+
+
+    private void OnWelcom_Server(NetMessage msg, NetworkConnection connectedClient)
+    {
+        
+        NetWelcome netWelcom = msg as NetWelcome;
+
+
+        Server.Singleton.SendToClient(connectedClient, new NetWelcome());
+
+        if (this.playerCount == 2)
+            Server.Singleton.BroadCast(new NetMessage());
+    }
+
+    private Team AssignTem_ToClient(int currentTotalUser)
+    {
+        if(currentTotalUser == 0)
+        {
+            return Team.Blue;
+        }    
+        else
+        {
+            return Team.Red;
+        }    
+    }
+
+    private void OnPiece_SelectServer(NetMessage netMessa, NetworkConnection sender)
+    {
+        NetPieceSelected netPiece_Selected = netMessa as NetPieceSelected;
+
+        Server.Singleton.BroadCast(netPiece_Selected);
+    }
+
+
+
+    private void OnVictory_Claim_Server(NetMessage netMessa, NetworkConnection sender)
+    {
+        NetVictoryClaim Victory_Claim = netMessa as NetVictoryClaim;
+
+        Server.Singleton.BroadCast(Victory_Claim);
+    }
+
+
+    //Client
+    private void OnWelcome_Client(NetMessage msg)
+    {
+        NetMessage net_Welcome = msg as NetWelcome;
+
+        this.playerTeam = Team.Blue;
+
+        Debug.Log($"{this.playerTeam}");
+    }
+
+    private void OnStartGame_Client(NetMessage msg)
+    {
+        this.onGameStart?.Invoke(Team.Red); 
+    }
+
+    private void On_PieceSelected_Client(NetMessage msg)
+    {
+        NetPieceSelected netPieceSelected = msg as NetPieceSelected;
+
+        if (this.currentSelectedPiece.IsNull)
+        {
+            this.currentSelectedPiece.CancelInvoke();
+            this.currentSelectedPiece = new NullPiece();
+        }
+        else
+        {
+            this.currentSelectedPiece = this.chessPieces[currentHover.x, currentHover.y];
+            this.currentSelectedPiece.SetPieceSelect();
+        }
+    }
+
+    // xử lí sự kiện di chuyển
+    private void On_MakeMove_Client(NetMessage msg)
+    {
+        NetMakeMove netMake_Move = msg as NetMakeMove;
+
+        this.currentHover.x = netMake_Move.NextX;
+        this.currentHover.y = netMake_Move.NextY;
+
+        this.ReplaceHoverPieceWithCurrentSelectedPiece(netMake_Move.killConfirm);
+
+        this.currentSelectedPiece.IsMoveValid(new Vector2Int(2,2));
+        this.currentSelectedPiece = new NullPiece();
+    }
+    private void On_MakeMove_Server(NetMessage msg)
+    {
+        NetMakeMove netMake_Move = msg as NetMakeMove;
+
+        Server.Singleton.BroadCast(netMake_Move);
+    }
+    private void On_Victory_Reset_Client(NetMessage msg)
+    {
+        NetVictoryClaim netVictoryClaim = msg as NetVictoryClaim;
+
+        GameStateManager.Singleton.UpdateGameState(GameState.Reset, (Turn)netVictoryClaim.VictoryTeam);
+    }
+    private void onNet_SwitchTeam_Client(NetMessage msg)
+    {
+        this.currentTurn = Team.Red;
+        if(this.playerTeam == Team.Red)
+        {
+            this.playerTeam = Team.Blue;
+        }
+        else
+        {
+            this.playerTeam = Team.Red;
+        }
+    }
 }
