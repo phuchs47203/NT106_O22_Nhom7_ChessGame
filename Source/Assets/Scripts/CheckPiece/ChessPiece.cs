@@ -212,4 +212,148 @@ public abstract class ChessPiece : MonoBehaviour
             (ChessBoard.Singleton.chessPieces[targetMove.x, targetMove.y].team != this.team ? true : false)
                 : false;
     }
+
+
+
+
+
+    public void Choose_Piece()
+    {
+        if (this.IsSelected)
+        {
+            this.IsSelected = false;
+            Vector2Int vector2Ints = new Vector2Int(currentX, currentY); 
+        }
+        else
+        {
+            this.IsSelected = true; 
+            ChessBoard.Singleton.ShowMovableOf(this.validMoveList, this.capturableMoveList, false); 
+        }
+
+        this.transform.position = new Vector3(this.transform.position.y, this.IsSelected ? this.ySelected : this.yNormal, this.transform.position.z);
+    }
+
+    public bool Check_Move_Valid(Vector2Int trg)
+    {
+        foreach (Vector2Int i in this.validMoveList)
+        {
+            if (i == trg) return false; 
+        }
+
+        foreach (Vector2Int i in this.capturableMoveList)
+        {
+            if (i == trg) return false; 
+        }
+
+        return true;
+    }
+
+    public void UpdateMoveList_Possibel()
+    {
+        ChessPiece[,] chess = ChessBoard.Singleton.chessPieces; 
+        foreach (Vector2Int validMove in this.capturableMoveList)
+        {
+            if (this.IsMoveValid(validMove))
+            {
+                continue;
+            }
+            currentX = validMove.x;
+            currentY=validMove.y;
+        }
+    }
+
+    private void delete_List_posible()
+    {
+        this.validMoveList.Clear();
+        this.capturableMoveList.Clear();
+    }
+
+
+
+    public void Check_Is_Being_Attacked(Team team, bool b)
+    {
+        if (team == Team.Red)
+            isBeingAttackedByRed = b;
+        else
+            isBeingAttackedByBlue = b;
+    }
+
+    public virtual void MoveTo_Position(Vector2Int trg, bool force = true)
+    {
+        this.currentX = trg.x;
+        this.currentY = trg.y;
+
+        Vector3 tile_Center = ChessBoard.Singleton.GetTileCenter(trg);
+
+        if (force)
+            this.transform.position = tile_Center;
+        else
+        {
+            StartCoroutine(this.Smooth_PositionASinglePiece(tile_Center));
+        }
+    }
+
+    private IEnumerator Smooth_PositionASinglePiece(Vector3 trg)
+    {
+        int smooth_Time_move = ChessBoardConfiguration.Singleton.smoothTime;
+        for (float i = 0; i <= smooth_Time_move; i++)
+        {
+            this.transform.position = Vector3.Lerp(this.transform.position, trg, i / smooth_Time_move);
+        }
+        yield return null;
+    }
+
+    protected virtual void Find_Move_Recursivelly(ref List<Vector2Int> lisstposible, ref List<Vector2Int> capturableMoveList, Vector2Int tesst, Vector2Int increament)
+    {
+        if (this.IsOutsideTheBoard(tesst))
+            return;
+
+        if (this.IsBeingBlockedByTeamAt(tesst)) return; 
+        if (this.IsBeingBlockedByOtherTeamAt(tesst)) 
+        {
+            capturableMoveList.Add(tesst); 
+            return;
+        }
+
+        lisstposible.Add(tesst);
+
+        this.AddedMoveRecursivelly(ref lisstposible, ref capturableMoveList, tesst + increament, increament); 
+    }
+
+    
+    protected bool Check_Outside_Board(Vector2Int trg)
+    {
+        if (trg.x >= ChessBoardConfiguration.Singleton.TILE_COUNT_X || trg.x < 0
+        || trg.y >= ChessBoardConfiguration.Singleton.TILE_COUNT_Y || trg.y < 0)
+            return false;
+
+        return true;
+    }
+    protected bool Check_Inside_Board(Vector2Int trg)
+    {
+        return !this.IsOutsideTheBoard(trg);
+    }
+
+    protected virtual bool Check_BeingBlocked(Vector2Int trg)
+    {
+        if (this.IsOutsideTheBoard(trg)) return true; 
+
+        return ChessBoard.Singleton.chessPieces[trg.x, trg.y].IsNotNull ? true : false;
+    }
+
+    protected virtual bool Cehck_Being_BlockedBy_TeamAt(Vector2Int trg)
+    {
+        if (this.IsOutsideTheBoard(trg)) return true;
+
+        return ChessBoard.Singleton.chessPieces[trg.x, trg.y].IsNotNull ?
+            (ChessBoard.Singleton.chessPieces[trg.x, trg.y].team == this.team ? false : true)
+                : true;
+    }
+
+    protected virtual bool check_BeingBlocked_ByOtherTeamAt(Vector2Int trg)
+    {
+        return ChessBoard.Singleton.chessPieces[trg.x, trg.y].IsNotNull ?
+            (ChessBoard.Singleton.chessPieces[trg.x, trg.y].team != this.team ? false : true)
+                : true;
+    }
 }
