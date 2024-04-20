@@ -15,8 +15,9 @@ public enum OpCode
     SWITCH_TEAM = 8,
     REMATCH = 9
 }
-// client khi gửi đến server thì không cần biết về networkconenction của nó
-// server là trung tâm xử lí chính --> cần biết về các ketes nối từ client để
+
+// Client khi gửi đến server thì không cần biết về networkconenction của nó
+// Server là trung tâm xử lí chính --> cần biết về các ketes nối từ client để
 // có thể gửi dữ liệu đến đúng client đó
 // Client gửi dữ liệu mạng qua phuowgn thứ trong tầng transport  được xung cấp trong Unity.networking.Transport
 

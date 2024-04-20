@@ -11,7 +11,7 @@ public class Queen : ChessPiece
         {
             for (int y = this.currentY - 1; y <= this.currentY + 1; y++)
             {
-                if (x == this.currentX && y == this.currentY) continue; // chỉ laoij cái trùng vị trí hiện tại thôi, còn lại đi được hết
+                if (x == this.currentX && y == this.currentY) continue; // chỉ loại cái trùng vị trí hiện tại thôi, còn lại đi được hết
 
                 Vector2Int nextMove = new Vector2Int(x, y);
                 Vector2Int moveDir = nextMove - new Vector2Int(this.currentX, this.currentY);

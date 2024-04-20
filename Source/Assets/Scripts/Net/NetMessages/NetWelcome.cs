@@ -1,6 +1,6 @@
 ﻿using Unity.Networking.Transport;
 
-// dùng trong local game, nhấp vòa thì ra màn hình welcom, gửi mesage là team anof đã vào màn hình  welcom
+// dùng trong local game, nhấp vào thì ra màn hình welcom, gửi mesage là team anof đã vào màn hình  welcom
 public class NetWelcome : NetMessage
 {
     public Team AssignedTeam { set; get; }

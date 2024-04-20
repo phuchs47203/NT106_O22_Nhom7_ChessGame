@@ -1,5 +1,7 @@
-using Unity.Networking.Transport;
+﻿using Unity.Networking.Transport;
 
+
+// thiết lập lại game
 public class NetRematch : NetMessage
 {
     public NetRematch()

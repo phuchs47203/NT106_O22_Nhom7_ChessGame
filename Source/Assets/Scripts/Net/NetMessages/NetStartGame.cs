@@ -1,5 +1,6 @@
-using Unity.Networking.Transport;
+﻿using Unity.Networking.Transport;
 
+// sự kiện Net Sartgame()
 public class NetStartGame : NetMessage
 {
     public NetStartGame()

@@ -14,7 +14,7 @@ public class NetMakeMove : NetMessage
     public int NextY { set; get; }
     public KillConfirm killConfirm;
 
-    // constructor khơi tạo di chuyển mới
+    // constructor khởi tạo di chuyển mới
     public NetMakeMove(int x, int y, KillConfirm killConfirm)
     {
         this.Code = OpCode.MAKE_MOVE;

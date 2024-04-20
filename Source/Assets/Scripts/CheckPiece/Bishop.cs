@@ -9,7 +9,7 @@ public class Bishop : ChessPiece
     {
         List<Vector2Int> allPossibleMoveList = new List<Vector2Int>();
 
-        // lặp qua 6 cái ô xung quanh, xau đo tơi ô tiếp theo thì lặp tiếp
+        // lặp qua 6 ô xung quanh, xau đo tơi ô tiếp theo thì lặp tiếp
         for (int x = this.currentX - 1; x <= this.currentX + 1; x++)
         {
             for (int y = this.currentY - 1; y <= this.currentY + 1; y++)

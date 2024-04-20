@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Networking.Transport;
 
-// Chesboard, Deadlist, ChessBoardConfiguration, InputEventMange đều nàm trong volumn Chesboard
+// Chesboard, Deadlist, ChessBoardConfiguration, InputEventMange đều nằm trong volumn Chesboard
 public enum Team
 {
     Blue = 0,

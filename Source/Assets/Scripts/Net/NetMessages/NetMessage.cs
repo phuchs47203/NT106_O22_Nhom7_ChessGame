@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-// lớp trừu tượng, ảo để cho những lớp khác xàis
+// lớp trừu tượng, ảo để cho những lớp khác xài
 public class NetMessage
 {
     // OpCode là mã enum định nghĩa trong Netunity

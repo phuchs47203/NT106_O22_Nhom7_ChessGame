@@ -11,7 +11,7 @@ public class Pawn : ChessPiece
     {
         base.Awake();
 
-        this.hasMadeFirstMove = false; // kiểm tra coi đo có phải lần di chueyern đàu tiên không, vì đàu tiên sẽ được đi 2 ô, nhuwgnx lần còn lại chỉ có 1 ô
+        this.hasMadeFirstMove = false; // kiểm tra coi đó có phải lần di chueyern đàu tiên không, vì đàu tiên sẽ được đi 2 ô, nhuwgnx lần còn lại chỉ có 1 ô
     }
 
     public override void MoveTo(Vector2Int targetMove, bool force = false)

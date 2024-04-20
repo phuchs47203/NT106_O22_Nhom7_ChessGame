@@ -11,7 +11,7 @@ public class InputEventManager : MonoBehaviour
 
     // quản lí các sự kiện chuột trên bàn cờ
     public event Action onLeftMouseButtonDown;
-    public event Action onLeftMouseButtonUp; // thả/nhả chuột
+    public event Action onLeftMouseButtonUp; // thả chuột
     public event Action onLeftMouseButtonHold;
     public event Action onRightMouseButtonDown; // nhấn chuột
     public event Action onRightMouseButtonUp;

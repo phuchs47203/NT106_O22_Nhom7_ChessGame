@@ -15,7 +15,7 @@ public class DeadList : MonoBehaviour
     private float deadTileSize;
     private float deadSizeMultiplier = 0.6f;
 
-    //hướng di chuyển của quân cờ của đội Xanh và đỏ trên bàn cờ.
+    //hướng di chuyển của quân cờ của 2 đội trên bàn cờ.
     private Vector3 bluePieceForward;
     private Vector3 redPieceForward;
 

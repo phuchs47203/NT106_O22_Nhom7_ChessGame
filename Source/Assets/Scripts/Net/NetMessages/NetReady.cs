@@ -5,7 +5,7 @@ using UnityEngine;
 
 // tương tự như các sự kiện kia
 // gửi message là team nào đã sẵn sàng
-// ex: team red sanex sàng, đag chờ người ta chơi với nos
+// ex: team red sẵn sàng, đag chờ người ta chơi với nos
 public class NetReady : NetMessage
 {
     public Team ReadyTeam { set; get; }

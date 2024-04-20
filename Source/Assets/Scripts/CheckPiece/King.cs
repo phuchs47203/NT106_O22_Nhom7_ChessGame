@@ -34,7 +34,7 @@ public class King : ChessPiece
 
                 Vector2Int nextMove = new Vector2Int(x, y);
 
-                //cái này không cần gọi đệ quy nên phải kiểm tra vị trí ngoài board , hay vị tri bị chặn
+                //cái này không cần gọi đệ quy nên phải kiểm tra vị trí ngoài board , hay vị trí bị chặn
 
                 if (this.IsOutsideTheBoard(nextMove)) continue;
 

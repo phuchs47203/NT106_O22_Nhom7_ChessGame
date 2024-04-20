@@ -11,7 +11,7 @@ public class Knight : ChessPiece
         {
             for (int y = this.currentY - 2; y <= this.currentY + 2; y++)
             {
-                // neeuvij trí có hàng dọc hoặc hàng ngag trùng thi loại vì con ngựa đâu đi dọc/ngang được
+                // nếu trí có hàng dọc hoặc hàng ngag trùng thi loại vì con ngựa đâu đi dọc/ngang được
                 if (x == this.currentX || y == this.currentY) continue;
 
                 Vector2Int nextMove = new Vector2Int(x, y); 

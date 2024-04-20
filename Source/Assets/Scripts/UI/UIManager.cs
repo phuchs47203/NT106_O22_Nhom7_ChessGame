@@ -10,9 +10,9 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Singleton { get; private set; }
-    [SerializeField] private Image currentTurnUI; // hình ảnh hiển thị màu của lượt đi hiện tại
+    [SerializeField] private Image currentTurnUI; // lượt đi hiện tại
     [SerializeField] private GameObject endGameCanvasUI; // Khi mà có người chơi vào thì tạo một gameobject
-    [SerializeField] private Toggle[] toggles; // cờ hiệu đẻ biết cá nhận sẵn sàng hay chưa
+    [SerializeField] private Toggle[] toggles; // cờ hiệu để biết cá nhận sẵn sàng hay chưa
     [SerializeField] private Button resetButton; // nút hởi động lại trò chơi
     [SerializeField] private Material blueTeamMaterial; // list các material của team xanh
     [SerializeField] private Material redTeamMaterial; // list các material của team đỏ

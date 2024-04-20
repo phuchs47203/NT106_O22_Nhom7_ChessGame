@@ -1,5 +1,6 @@
 ﻿using Unity.Networking.Transport;
 
+// xử lí khi có quân cờ được chọn
 public class NetPieceSelected : NetMessage
 {
     public int currentX { set; get; }
