@@ -185,7 +185,10 @@ public class ChessBoard : MonoBehaviour
             Destroy(piece.gameObject);
         }
 
+
+        //khỏi tạo lại  các piece mới
         this.SpawnAllPieces();
+        // đjăt vị trí cho các piece đó
         this.PositionAllPieces();
 
         this.currentTurn = Team.Blue;
@@ -522,7 +525,7 @@ public class ChessBoard : MonoBehaviour
         // We need to assign a team and return the message back to that client
         NetWelcome netWelcome = message as NetWelcome;
 
-        netWelcome.AssignedTeam = this.AssignTeamToClient(++this.playerCount);
+        netWelcome.AssignedTeam = this.AssignTeamToClient(++this.playerCount); // gán team cho client là red
 
         Server.Singleton.SendToClient(connectedClient, netWelcome);
 

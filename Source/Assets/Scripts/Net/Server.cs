@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Server : MonoBehaviour
 {
-    public static Server Singleton { get; private set; }
+    public static Server Singleton { get; private set; } // khởi tạo một đối đượng giúp có thể quy cập các phương thức trong driver từ bát kì đâu
     private void Awake()
     {
         Singleton = this;
@@ -32,6 +32,9 @@ public class Server : MonoBehaviour
         endPoint.Port = port;
 
         // bind driver với endpoint coi được không
+        // thiết lập một điểm lắng nghe các kết nối đến từ endpoint được chỉ định
+        //Bind thiết lập một socket hoặc điểm cuối để lắng nghe hoặc gửi dữ liệu qua mạng
+        //dựa trên địa chỉ và cổng cụ thể mà bạn chỉ định.
         if (this.driver.Bind(endPoint) != 0)
         {
             Debug.Log($"Unable to bind to port {endPoint.Port}");
@@ -39,12 +42,12 @@ public class Server : MonoBehaviour
         }
         else
         {
-            this.driver.Listen();
+            this.driver.Listen(); // lắng nghe
             Debug.Log($"Currently listening on port {endPoint.Port}");
         }
 
-        this.connections = new NativeList<NetworkConnection>(2, Allocator.Persistent);
-        this.isActive = true; // đã sẵn sang flanwgs nghe
+        this.connections = new NativeList<NetworkConnection>(2, Allocator.Persistent); // thiết lập dnah sách kêt snooi mạng
+        this.isActive = true; // đặt trạng thái hoạt động là true
     }
 
     //khi server đóng thì giải phóng tìa nguyên, xóa các dnah sách kết nối
@@ -67,13 +70,15 @@ public class Server : MonoBehaviour
     // duy rtif kết nốt
     // cháp nahanj ekest nối
     // xử lí các thông điệp từ các kết nối hiện tại
+
+    // khi bỏ các script này vào Unity thì nó sẽ được Unity họi tự động trong mỗi frame
     public void Update()
     {
         if (!this.isActive) return;
 
         this.KeepAlive(); // gửi các gói tin keep alive định kỳ đến các máy khách để duy trì kết nối, đma rbaor không bị gián đoạn với tần xuất cố định
 
-        this.driver.ScheduleUpdate().Complete(); // lên lịch cập nhật, completw() đmả bỏa cập nhật hoàn thành trước khi có sự kiện khác
+        this.driver.ScheduleUpdate().Complete(); // lên lịch cập nhật netwrok driver, completw() đmả bỏa cập nhật hoàn thành trước khi có sự kiện khác
 
         this.CleanupConnections(); // loại bỏ kết nối không hợp lệ
         this.AcceptNewConnections(); // chấp nhận kêt snoois mới
@@ -85,12 +90,12 @@ public class Server : MonoBehaviour
     {
         if (Time.time - this.lastKeepAlive > this.keepAliveTickRate)
         {
-            this.lastKeepAlive = Time.time; // cập nhật lastkepp alive
+            this.lastKeepAlive = Time.time; // cập nhật last keep alive
             this.BroadCast(new NetKeepAlive()); // gửi đến mọi máy trong mạng
         }
     }
 
-    // loại bro các kêt nối từ dnah sách
+    // loại bỏ các kêt nối từ danh sách
     private void CleanupConnections()
     {
         for (int i = 0; i < this.connections.Length; i++)

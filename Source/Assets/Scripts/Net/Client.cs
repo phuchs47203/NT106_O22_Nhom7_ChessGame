@@ -21,9 +21,19 @@ public class Client : MonoBehaviour
     {
         Singleton = this;
     }
+    //NetworkDriver là API chính mà người dùng tương tác với gói Unity Transport. 
+    // có các phương thức listen, connect, bind(ipEndpoint), CreatePipeline
+    // driver có thể bind, connect, gửi dữu liệu beginsend, endsend , disconenct, getconnectionState
+    public NetworkDriver driver; // gọi là trình điều khiển =>  quản lsi, khởi tọa ektes nối, giám sát netwokrk conencttion
+    // driver sẽ tạo ra connection bằng hpuwogn thức .Connect(Endpoint)
 
-    public NetworkDriver driver;
-    private NetworkConnection connection;
+
+
+    // là một struct trong unity.trnasport
+    //The NetworkConnection is a struct that hold all information needed by the driver to link it with a virtual connection.
+    //The NetworkConnection is a public representation of a connection.
+    private NetworkConnection connection; // quản lí một ekets nôi được tạo ra từ client với server 
+    // network connection có các phuwognt whucs IsCreate(), datastream reder/writer , network event type, PopEvent để lấy loại event
 
     private bool isActive = false; // theo dõi trạng thái của client còn hoạt động hay không
 
@@ -34,7 +44,7 @@ public class Client : MonoBehaviour
     {
         this.driver = NetworkDriver.Create();
         NetworkEndPoint endPoint = NetworkEndPoint.Parse(ip, port); // ip và cổng được truyền từ MenuUIManager
-
+        //conect tới endpoit mà bên server khởi tạo, đang lắng nghe
         this.connection = this.driver.Connect(endPoint); // gán cho biết connection một kêt snoois mới đến máy chủ với endpoit vừa được tạo
 
         Debug.Log($"Attemping to connect to Server on {endPoint.Address}");
@@ -51,7 +61,7 @@ public class Client : MonoBehaviour
             this.UnregisterToEvent();
             this.driver.Dispose();
             this.isActive = false;
-            connection = default(NetworkConnection);
+            connection = default(NetworkConnection); // gán về trnajg thái mặc định, không chứa thông tin nào của kết nối
         }
     }
 

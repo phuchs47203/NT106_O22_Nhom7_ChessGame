@@ -48,7 +48,7 @@ public class GameStateManager : MonoBehaviour
     // hàm cập nhật trạng thái của game liên tục, sẽ được gộ mỗi khi có sự kiện
     public void UpdateGameState(GameState nextState, Turn? turn)
     {
-        this.currentState = nextState;
+        this.currentState = nextState; //
 
         if (turn != null)
             this.UpdateCurrentTurn((Turn)turn); // nếu lượt chơi khác null thì gọi cập nhật

@@ -56,7 +56,8 @@ public class UIManager : MonoBehaviour
         InputEventManager.Singleton.onSpacePressDown += OnSpaceButtonPressDown; // kích hoạt sự kiện khi người chơi nhấn nút space, nếu 2 bên đều nhấn thì chơi tiếp tục
 
         this.endGameCanvasUI.SetActive(true); // kích họat sự kiện kết thúc game, hiện UI
-        this.endGameCanvasUI.transform.GetChild((int)turn)?.gameObject.SetActive(true);
+        this.endGameCanvasUI.transform.GetChild((int)turn)?.gameObject.SetActive(true); // lấy phần tử con của endGameCanvasUI, truyền đối số tủn cho nó
+        // nếu turn red thì hiện team red thắng, ngược lại thì hiện phần team blue thắng
     }
 
     private void OnGameResetState()
@@ -145,7 +146,7 @@ public class UIManager : MonoBehaviour
         {
             if (!toggle.isOn) resetConfirm = false;
         }
-
+        //nêu cả 2 toggle đều được on thì nghĩa là 2 bên đồng ý chơi lại
         if (resetConfirm)
         {
             Client.Singleton.SendToServer(new NetRematch()); // gửi deense server yêu cầu chơi lại
